@@ -1,8 +1,12 @@
 #version 450
 
+uniform vec3 object_color;
+
+in float diffuse;
+
 out vec4 color;
 
 void main(void)
 {
-    color = vec4(1.0, 0.0, 0.0, 1.0);
+    color = vec4(diffuse * object_color, 1.);
 }

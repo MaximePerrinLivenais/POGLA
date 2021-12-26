@@ -6,7 +6,7 @@ void main(void)
 {
     if (gl_InvocationID == 0)
     {
-        int tesselation_level = 12;
+        int tesselation_level = 16;
 
         gl_TessLevelOuter[0] = tesselation_level;
         gl_TessLevelOuter[1] = tesselation_level;

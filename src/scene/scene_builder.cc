@@ -22,7 +22,9 @@ std::shared_ptr<Scene> build_scene(misc::Options& options)
     }
 
     {
-        auto points = std::vector<float>({-1.0, 0.5, 1.0,
+        auto color = misc::Vector3<float>(0., 1., 1.);
+
+        auto points = std::vector<float>({-1.0, 0.5, -1.0,
                                             -0.5, 0.5, -1.0,
                                             0.5, 0.5, -1.0,
                                             1.0, 0.5, -1.0,
@@ -30,18 +32,18 @@ std::shared_ptr<Scene> build_scene(misc::Options& options)
                                             -0.5, 0.0, -0.5,
                                             0.5, 0.0, -0.5,
                                             1.0, 0.0, -0.5,
-                                            -1.0, 0.0, 0.5,
-                                            -0.5, 0.0, 0.5,
-                                            0.5, 0.0, 0.5,
-                                            1.0, 0.0, 0.5,
-                                            -1.0, -0.5, 1.0,
-                                            -0.5, 0.3, 1.0,
+                                            -1.0, 0.0,  0.5,
+                                            -0.5, 0.0,  0.5,
+                                            0.5, 0.0,  0.5,
+                                            1.0, 0.0,  0.5,
+                                            -1.0, -0.5,  1.0,
+                                            -0.5, 0.3,  1.0,
                                             0.5, 0.3,  1.0,
                                             1.0, 0.3,  1.0});
 
         auto fun = [](){ glPatchParameteri(GL_PATCH_VERTICES, 16); glDrawArrays(GL_PATCHES, 0, 16); };
 
-        auto object = Object::build_new_object(points, 3, program, fun);
+        auto object = Object::build_new_object(points, 3, program, fun, color);
 
         scene->add_object(object);
     }

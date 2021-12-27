@@ -1,23 +1,29 @@
 #version 450
 
+uniform mat4 mvp_matrix;
+
 layout(triangles) in;
-layout(line_strip, max_vertices = 2) out;
+layout(line_strip, max_vertices = 6) out;
 
 in vec4 tes_normal[3];
 in float tes_diffuse[3];
 out float gs_diffuse;
 
+void emit_vertices_normal()
+{
+    for (int index = 0; index < 3; index++)
+    {
+        gl_Position = gl_in[index].gl_Position;
+        EmitVertex();
+
+        gl_Position += normalize(mvp_matrix * tes_normal[index]);
+        EmitVertex();
+        EndPrimitive();
+    }
+}
+
 void main()
 {
-    vec4 origin = (gl_in[0].gl_Position + gl_in[1].gl_Position + gl_in[2].gl_Position) / 3;
-    vec4 mean_normal = (tes_normal[0] + tes_normal[1] + tes_normal[2]) / 3;
-
-    gs_diffuse = 1;
-    gl_Position = origin;
-    EmitVertex();
-
-    gl_Position = origin + 0.1 * mean_normal;
-    EmitVertex();
-
-    EndPrimitive();
+    gs_diffuse = 0.;
+    emit_vertices_normal();
 }

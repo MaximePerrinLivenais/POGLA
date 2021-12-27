@@ -64,15 +64,16 @@ Vertex compute_output_vertex(float u, float v)
         }
     }
 
-    vec3 normal = normalize(cross(u_tangent, v_tangent));
+    vec3 normal = cross(u_tangent, v_tangent);
 
     return Vertex(pos, normal);
 }
 
 float get_diffuse(vec3 light_pos, Vertex vertex)
 {
+    vec3 normal = normalize(vertex.normal);
     vec3 light_dir = normalize(light_pos - vertex.position);
-    return clamp(dot(vertex.normal, light_dir), 0., 1.);
+    return clamp(dot(normal, light_dir), 0., 1.);
 }
 
 void main(void)
@@ -86,5 +87,5 @@ void main(void)
 
     vec3 light_pos = vec3(20, 50, 20);
     tes_diffuse = get_diffuse(light_pos, vertex);
-    tes_normal = mvp_matrix * vec4(vertex.normal, 1);
+    tes_normal = vec4(vertex.normal, 1);
 }

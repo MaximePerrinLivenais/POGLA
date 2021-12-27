@@ -54,9 +54,9 @@ std::shared_ptr<Scene> build_scene(misc::Options& options)
     }
 
     {
-        auto color = misc::Vector3<float>(0., 1., 1.);
+        auto color = misc::Vector3<float>(1., 0., 0.);
 
-        auto points = std::vector<float>({-1.0, 0.5,  1.0, //
+        auto points = std::vector<float>({-1.0, 0.5,  -1.0, //
                                           -0.5, 0.5,  -1.0, //
                                           0.5,  0.5,  -1.0, //
                                           1.0,  0.5,  -1.0, //

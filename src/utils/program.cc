@@ -5,10 +5,10 @@
 #include <iostream>
 
 Program::Program(std::string vertex_shader_src,
-                    optional_string tess_control_shader_src,
-                    optional_string tess_evaluation_shader_src,
-                    optional_string geometry_shader_src,
-                    std::string fragment_shader_src)
+                 optional_string tess_control_shader_src,
+                 optional_string tess_evaluation_shader_src,
+                 optional_string geometry_shader_src,
+                 std::string fragment_shader_src)
 {
     ready_ = false;
 
@@ -25,11 +25,13 @@ Program::Program(std::string vertex_shader_src,
     std::optional<GLuint> tess_evaluation_shader = std::nullopt;
     if (tess_control_shader_src && tess_evaluation_shader_src)
     {
-        tess_control_shader = compile(*tess_control_shader_src, GL_TESS_CONTROL_SHADER);
+        tess_control_shader =
+            compile(*tess_control_shader_src, GL_TESS_CONTROL_SHADER);
         if (!tess_control_shader)
             return;
 
-        tess_evaluation_shader = compile(*tess_evaluation_shader_src, GL_TESS_EVALUATION_SHADER);
+        tess_evaluation_shader =
+            compile(*tess_evaluation_shader_src, GL_TESS_EVALUATION_SHADER);
         if (!tess_evaluation_shader)
             return;
 
@@ -156,49 +158,41 @@ std::optional<GLuint> Program::compile(std::string shader_src,
 }
 
 shared_program Program::make_program(std::string vertex_shader_src,
-                                        std::string fragment_shader_src)
+                                     std::string fragment_shader_src)
 {
-    return std::make_shared<Program>(vertex_shader_src,
-                                        std::nullopt,
-                                        std::nullopt,
-                                        std::nullopt,
-                                        fragment_shader_src);
+    return std::make_shared<Program>(vertex_shader_src, std::nullopt,
+                                     std::nullopt, std::nullopt,
+                                     fragment_shader_src);
 }
 
 shared_program Program::make_program(std::string vertex_shader_src,
-                                        std::string tess_control_shader_src,
-                                        std::string tess_evaluation_shader_src,
-                                        std::string fragment_shader_src)
+                                     std::string tess_control_shader_src,
+                                     std::string tess_evaluation_shader_src,
+                                     std::string fragment_shader_src)
 {
-    return std::make_shared<Program>(vertex_shader_src,
-                                        tess_control_shader_src,
-                                        tess_evaluation_shader_src,
-                                        std::nullopt,
-                                        fragment_shader_src);
+    return std::make_shared<Program>(vertex_shader_src, tess_control_shader_src,
+                                     tess_evaluation_shader_src, std::nullopt,
+                                     fragment_shader_src);
 }
 
 shared_program Program::make_program(std::string vertex_shader_src,
-                                        std::string geometry_shader_src,
-                                        std::string fragment_shader_src)
+                                     std::string geometry_shader_src,
+                                     std::string fragment_shader_src)
 {
-    return std::make_shared<Program>(vertex_shader_src,
-                                        std::nullopt,
-                                        std::nullopt,
-                                        geometry_shader_src,
-                                        fragment_shader_src);
+    return std::make_shared<Program>(vertex_shader_src, std::nullopt,
+                                     std::nullopt, geometry_shader_src,
+                                     fragment_shader_src);
 }
 
 shared_program Program::make_program(std::string vertex_shader_src,
-                                        std::string tess_control_shader_src,
-                                        std::string tess_evaluation_shader_src,
-                                        std::string geometry_shader_src,
-                                        std::string fragment_shader_src)
+                                     std::string tess_control_shader_src,
+                                     std::string tess_evaluation_shader_src,
+                                     std::string geometry_shader_src,
+                                     std::string fragment_shader_src)
 {
-    return std::make_shared<Program>(vertex_shader_src,
-                                        tess_control_shader_src,
-                                        tess_evaluation_shader_src,
-                                        geometry_shader_src,
-                                        fragment_shader_src);
+    return std::make_shared<Program>(vertex_shader_src, tess_control_shader_src,
+                                     tess_evaluation_shader_src,
+                                     geometry_shader_src, fragment_shader_src);
 }
 
 void Program::use()

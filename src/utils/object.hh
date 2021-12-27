@@ -3,11 +3,11 @@
 #include <functional>
 #include <optional>
 
+#include "misc/matrix4.hh"
 #include "program.hh"
+#include "scene/scene_data.hh"
 #include "texture.hh"
 #include "vao.hh"
-#include "misc/matrix4.hh"
-#include "scene/scene_data.hh"
 
 class Object;
 
@@ -18,19 +18,19 @@ using shared_object = std::shared_ptr<Object>;
 class Object
 {
 public:
-    Object(const shared_program program,
-            const std::function<void()>& drawing_function,
-            const optional_float_vec3 color,
-            const optional_float diffuse,
-            const optional_float specular);
+    Object(const std::vector<shared_program> programs,
+           const std::function<void()>& drawing_function,
+           const optional_float_vec3 color, const optional_float diffuse,
+           const optional_float specular);
 
-    static shared_object build_new_object(const std::vector<float>& points,
-                                            const size_t element_size,
-                                            const shared_program program,
-                                            const std::function<void()>& drawing_function,
-                                            const optional_float_vec3 color = std::nullopt,
-                                            const optional_float diffuse = std::nullopt,
-                                            const optional_float specular = std::nullopt);
+    static shared_object
+    build_new_object(const std::vector<float>& points,
+                     const size_t element_size,
+                     const std::vector<shared_program> programs,
+                     const std::function<void()>& drawing_function,
+                     const optional_float_vec3 color = std::nullopt,
+                     const optional_float diffuse = std::nullopt,
+                     const optional_float specular = std::nullopt);
 
     void translate(float x, float y, float z);
     void rotation(float x, float y, float z);
@@ -39,7 +39,7 @@ public:
     void add_vbo(const std::vector<float>& values, unsigned int id, GLint size);
 
     void set_texture(shared_texture texture);
-    void set_program(shared_program program);
+    void set_programs(std::vector<shared_program> program);
 
     void set_location(misc::Vector3<float> pos);
 
@@ -63,7 +63,8 @@ private:
     optional_float specular_coef_;
 
     shared_texture texture_;
-    shared_program program_;
+
+    std::vector<shared_program> programs_;
 
     std::function<void()> drawing_function_;
 };

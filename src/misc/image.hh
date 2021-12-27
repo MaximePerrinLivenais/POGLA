@@ -5,7 +5,8 @@
 
 struct ImageRGB
 {
-    explicit ImageRGB(const size_t width, const size_t height, const std::vector<uint8_t> data);
+    explicit ImageRGB(const size_t width, const size_t height,
+                      const std::vector<uint8_t> data);
 
     ~ImageRGB() = default;
 

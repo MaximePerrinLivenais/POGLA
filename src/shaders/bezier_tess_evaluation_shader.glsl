@@ -2,6 +2,9 @@
 
 layout (quads, equal_spacing, ccw) in;
 
+out vec4 tes_normal;
+out float tes_diffuse;
+
 uniform mat4 mvp_matrix;
 
 struct Vertex
@@ -72,8 +75,6 @@ float get_diffuse(vec3 light_pos, Vertex vertex)
     return clamp(dot(vertex.normal, light_dir), 0., 1.);
 }
 
-out float diffuse;
-
 void main(void)
 {
     float[] u_polynom = get_polynom(gl_TessCoord.x);
@@ -84,6 +85,6 @@ void main(void)
     gl_Position = mvp_matrix * vec4(vertex.position, 1.);
 
     vec3 light_pos = vec3(20, 50, 20);
-    diffuse = get_diffuse(light_pos, vertex);
-
+    tes_diffuse = get_diffuse(light_pos, vertex);
+    tes_normal = mvp_matrix * vec4(vertex.normal, 1);
 }

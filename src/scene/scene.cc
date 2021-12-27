@@ -46,7 +46,7 @@ void Scene::update(misc::Window& window)
 
     update_camera_direction(horizontalAngle, verticalAngle);
 
-    //skybox_->set_location(camera_.get_position());
+    // skybox_->set_location(camera_.get_position());
 }
 
 void Scene::draw()
@@ -56,8 +56,8 @@ void Scene::draw()
 
     Scene_data data{vp, cam_pos};
 
-    //skybox_->draw(data);
-    //ground_->draw(data);
+    // skybox_->draw(data);
+    // ground_->draw(data);
 
     for (auto obj : objects_)
         obj->draw(data);

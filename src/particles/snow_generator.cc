@@ -20,4 +20,3 @@ void SnowGenerator::generate(unsigned n)
                                          color_, speed_, 2, 15});
     }
 }
-

@@ -18,29 +18,29 @@ class Program
 {
 public:
     Program(std::string vertex_shader_src,
-                optional_string tess_control_shader_src,
-                optional_string tess_evaluation_shader_src,
-                optional_string geometry_shader_src,
-                std::string fragment_shader_src);
+            optional_string tess_control_shader_src,
+            optional_string tess_evaluation_shader_src,
+            optional_string geometry_shader_src,
+            std::string fragment_shader_src);
     ~Program();
 
     static shared_program make_program(std::string vertex_shader_src,
-                                        std::string fragment_shader_src);
+                                       std::string fragment_shader_src);
 
     static shared_program make_program(std::string vertex_shader_src,
-                                        std::string tess_control_shader_src,
-                                        std::string tess_evaluation_shader_src,
-                                        std::string fragment_shader_src);
+                                       std::string tess_control_shader_src,
+                                       std::string tess_evaluation_shader_src,
+                                       std::string fragment_shader_src);
 
     static shared_program make_program(std::string vertex_shader_src,
-                                        std::string geometry_shader_src,
-                                        std::string fragment_shader_src);
+                                       std::string geometry_shader_src,
+                                       std::string fragment_shader_src);
 
     static shared_program make_program(std::string vertex_shader_src,
-                                        std::string tess_control_shader_src,
-                                        std::string tess_evaluation_shader_src,
-                                        std::string geometry_shader_src,
-                                        std::string fragment_shader_src);
+                                       std::string tess_control_shader_src,
+                                       std::string tess_evaluation_shader_src,
+                                       std::string geometry_shader_src,
+                                       std::string fragment_shader_src);
 
     std::string get_log();
     bool is_ready();

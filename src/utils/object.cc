@@ -1,41 +1,34 @@
 #include "object.hh"
 
-Object::Object(const shared_program program,
-                const std::function<void()>& drawing_function,
-                const optional_float_vec3 color,
-                const optional_float diffuse,
-                const optional_float specular)
+Object::Object(const std::vector<shared_program> programs,
+               const std::function<void()>& drawing_function,
+               const optional_float_vec3 color, const optional_float diffuse,
+               const optional_float specular)
     : vao_()
     , model_matrix_(misc::Matrix4::identity())
     , color_(color)
     , diffuse_coef_(diffuse)
     , specular_coef_(specular)
     , texture_(nullptr)
-    , program_(program)
+    , programs_(programs)
     , drawing_function_(drawing_function)
 
 {}
 
-shared_object Object::build_new_object(const std::vector<float>& points,
-                                            const size_t element_size,
-                                            const shared_program program,
-                                            const std::function<void()>& drawing_function,
-                                            const optional_float_vec3 color,
-                                            const optional_float diffuse,
-                                            const optional_float specular)
+shared_object Object::build_new_object(
+    const std::vector<float>& points, const size_t element_size,
+    const std::vector<shared_program> programs,
+    const std::function<void()>& drawing_function,
+    const optional_float_vec3 color, const optional_float diffuse,
+    const optional_float specular)
 {
-    auto object = std::make_shared<Object>(program,
-                                            drawing_function,
-                                            color,
-                                            diffuse,
-                                            specular);
+    auto object = std::make_shared<Object>(programs, drawing_function, color,
+                                           diffuse, specular);
 
     object->add_vbo(points, 0, element_size);
 
     return object;
 }
-
-
 
 void Object::translate(float x, float y, float z)
 {
@@ -64,9 +57,9 @@ void Object::set_texture(shared_texture texture)
     texture_ = texture;
 }
 
-void Object::set_program(shared_program program)
+void Object::set_programs(std::vector<shared_program> programs)
 {
-    program_ = program;
+    programs_ = programs;
 }
 
 void Object::set_location(misc::Vector3<float> pos)
@@ -103,7 +96,6 @@ int Object::get_texture_unit_id() const
 
 void Object::bind()
 {
-    program_->use();
     vao_.bind();
 }
 
@@ -117,22 +109,26 @@ misc::Matrix4 Object::get_model_matrix() const
 void Object::draw(const Scene_data& data)
 {
     bind();
+    for (auto i = 0; i < programs_.size(); i++)
+    {
+        programs_[i]->use();
 
-    auto mvp = data.vp_matrix;
-    mvp *= get_model_matrix();
+        auto mvp = data.vp_matrix;
+        mvp *= get_model_matrix();
 
-    program_->update_uniform("camera_position", data.camera_position);
+        programs_[i]->update_uniform("camera_position", data.camera_position);
 
-    if (color_)
-        program_->update_uniform("object_color", *color_);
-    if (diffuse_coef_)
-        program_->update_uniform("diffuse", *diffuse_coef_);
-    if (specular_coef_)
-        program_->update_uniform("specular", *specular_coef_);
-    if (texture_)
-        program_->update_uniform("texture_sampler1", *texture_);
+        if (color_)
+            programs_[i]->update_uniform("object_color", *color_);
+        if (diffuse_coef_)
+            programs_[i]->update_uniform("diffuse", *diffuse_coef_);
+        if (specular_coef_)
+            programs_[i]->update_uniform("specular", *specular_coef_);
+        if (texture_)
+            programs_[i]->update_uniform("texture_sampler1", *texture_);
 
-    program_->update_uniform("mvp_matrix", mvp);
+        programs_[i]->update_uniform("mvp_matrix", mvp);
 
-    drawing_function_();
+        drawing_function_();
+    }
 }

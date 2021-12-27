@@ -4,8 +4,10 @@ layout (quads, equal_spacing, ccw) in;
 
 out vec4 tes_normal;
 out float tes_diffuse;
+out float tes_specular;
 
 uniform mat4 mvp_matrix;
+uniform vec3 camera_position;
 
 struct Vertex
 {
@@ -76,6 +78,18 @@ float get_diffuse(vec3 light_pos, Vertex vertex)
     return clamp(dot(normal, light_dir), 0., 1.);
 }
 
+float get_specular(vec3 light_pos, Vertex vertex)
+{
+    vec3 normal = normalize(vertex.normal);
+    vec3 camera_dir = normalize(camera_position - vertex.position);
+    vec3 light_dir = normalize(light_pos - vertex.position);
+    vec3 reflect_dir = reflect(light_dir, normal);
+
+    float ns = 1.;
+
+    return pow(clamp(dot(camera_dir, reflect_dir), 0., 1.), ns);
+}
+
 void main(void)
 {
     float[] u_polynom = get_polynom(gl_TessCoord.x);
@@ -87,5 +101,6 @@ void main(void)
 
     vec3 light_pos = vec3(20, 50, 20);
     tes_diffuse = get_diffuse(light_pos, vertex);
+    tes_specular = get_specular(light_pos, vertex);
     tes_normal = vec4(vertex.normal, 1);
 }

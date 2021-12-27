@@ -8,9 +8,11 @@ Program::Program(std::string vertex_shader_src,
                  optional_string tess_control_shader_src,
                  optional_string tess_evaluation_shader_src,
                  optional_string geometry_shader_src,
-                 std::string fragment_shader_src)
+                 std::string fragment_shader_src,
+                 std::function<void()> drawing_function)
 {
     ready_ = false;
+    drawing_function_ = drawing_function;
 
     // Get a program object.
     GLuint program = glCreateProgram();
@@ -158,41 +160,45 @@ std::optional<GLuint> Program::compile(std::string shader_src,
 }
 
 shared_program Program::make_program(std::string vertex_shader_src,
-                                     std::string fragment_shader_src)
+                                     std::string fragment_shader_src,
+                                     std::function<void()> drawing_function)
 {
     return std::make_shared<Program>(vertex_shader_src, std::nullopt,
                                      std::nullopt, std::nullopt,
-                                     fragment_shader_src);
+                                     fragment_shader_src, drawing_function);
 }
 
 shared_program Program::make_program(std::string vertex_shader_src,
                                      std::string tess_control_shader_src,
                                      std::string tess_evaluation_shader_src,
-                                     std::string fragment_shader_src)
+                                     std::string fragment_shader_src,
+                                     std::function<void()> drawing_function)
 {
     return std::make_shared<Program>(vertex_shader_src, tess_control_shader_src,
                                      tess_evaluation_shader_src, std::nullopt,
-                                     fragment_shader_src);
+                                     fragment_shader_src, drawing_function);
 }
 
 shared_program Program::make_program(std::string vertex_shader_src,
                                      std::string geometry_shader_src,
-                                     std::string fragment_shader_src)
+                                     std::string fragment_shader_src,
+                                     std::function<void()> drawing_function)
 {
     return std::make_shared<Program>(vertex_shader_src, std::nullopt,
                                      std::nullopt, geometry_shader_src,
-                                     fragment_shader_src);
+                                     fragment_shader_src, drawing_function);
 }
 
 shared_program Program::make_program(std::string vertex_shader_src,
                                      std::string tess_control_shader_src,
                                      std::string tess_evaluation_shader_src,
                                      std::string geometry_shader_src,
-                                     std::string fragment_shader_src)
+                                     std::string fragment_shader_src,
+                                     std::function<void()> drawing_function)
 {
-    return std::make_shared<Program>(vertex_shader_src, tess_control_shader_src,
-                                     tess_evaluation_shader_src,
-                                     geometry_shader_src, fragment_shader_src);
+    return std::make_shared<Program>(
+        vertex_shader_src, tess_control_shader_src, tess_evaluation_shader_src,
+        geometry_shader_src, fragment_shader_src, drawing_function);
 }
 
 void Program::use()
@@ -213,6 +219,11 @@ std::string Program::get_log()
 bool Program::is_ready()
 {
     return ready_;
+}
+
+void Program::draw() const
+{
+    drawing_function_();
 }
 
 GLuint Program::get_attrib_loc(std::string variable) const

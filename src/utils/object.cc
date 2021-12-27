@@ -109,7 +109,7 @@ misc::Matrix4 Object::get_model_matrix() const
 void Object::draw(const Scene_data& data)
 {
     bind();
-    for (auto i = 0; i < programs_.size(); i++)
+    for (std::size_t i = 0; i < programs_.size(); i++)
     {
         programs_[i]->use();
 
@@ -129,6 +129,6 @@ void Object::draw(const Scene_data& data)
 
         programs_[i]->update_uniform("mvp_matrix", mvp);
 
-        drawing_function_();
+        programs_[i]->draw();
     }
 }

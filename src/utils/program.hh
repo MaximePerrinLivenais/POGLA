@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <optional>
+#include <functional>
 #include <string>
 #include <GL/glew.h>
 #include "texture.hh"
@@ -21,26 +22,31 @@ public:
             optional_string tess_control_shader_src,
             optional_string tess_evaluation_shader_src,
             optional_string geometry_shader_src,
-            std::string fragment_shader_src);
+            std::string fragment_shader_src,
+            std::function<void()> drawing_function);
     ~Program();
 
     static shared_program make_program(std::string vertex_shader_src,
-                                       std::string fragment_shader_src);
+                                       std::string fragment_shader_src,
+                                       std::function<void()> drawing_function);
 
     static shared_program make_program(std::string vertex_shader_src,
                                        std::string tess_control_shader_src,
                                        std::string tess_evaluation_shader_src,
-                                       std::string fragment_shader_src);
+                                       std::string fragment_shader_src,
+                                       std::function<void()> drawing_function);
 
     static shared_program make_program(std::string vertex_shader_src,
                                        std::string geometry_shader_src,
-                                       std::string fragment_shader_src);
+                                       std::string fragment_shader_src,
+                                       std::function<void()> drawing_function);
 
     static shared_program make_program(std::string vertex_shader_src,
                                        std::string tess_control_shader_src,
                                        std::string tess_evaluation_shader_src,
                                        std::string geometry_shader_src,
-                                       std::string fragment_shader_src);
+                                       std::string fragment_shader_src,
+                                       std::function<void()> drawing_function);
 
     std::string get_log();
     bool is_ready();
@@ -56,8 +62,12 @@ public:
 
     GLuint get_attrib_loc(std::string variable) const;
 
+    void draw() const;
+
 private:
     GLuint program_;
     bool ready_;
     std::string logs_;
+
+    std::function<void()> drawing_function_;
 };
